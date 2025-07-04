@@ -21,12 +21,207 @@
   --button-text: #ffffff;
 }
 
+/* --- Dreamy/Pastel Glassmorphic Core Styles --- */
+
 .App {
   text-align: center;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Quicksand', 'Baloo 2', 'Comic Sans MS', 'Comic Sans', cursive, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Dreamy glassy app background with a pastel gradient and gentle shimmer effect */
+.dreamy-app-bg {
+  background: linear-gradient(135deg, #ffeaf4 0%, #caaaff 50%, #ffabd2 100%);
+  min-height: 100vh;
+  background-size: 140% 140%;
+  animation: bgDreamFloat 18s cubic-bezier(.77,.02,.13,.99) infinite;
+}
+
+@keyframes bgDreamFloat {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 62%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* --- Dreamy Navbar Styles --- */
+.dreamy-navbar {
+  position: fixed;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: max(370px, 64vw);
+  max-width: 700px;
+  min-width: 286px;
+  background: rgba(246, 233, 253, 0.66);
+  border-radius: 36px;
+  box-shadow: 0 8px 32px 0 rgba(202, 170, 255, 0.22), 0 3px 24px -12px #ffabd2;
+  backdrop-filter: blur(24px);
+  border: 2px solid rgba(202,170,255,0.24);
+  border-bottom: 3.5px solid #ffabd2;
+  overflow: visible;
+  transition: box-shadow 0.3s, background 0.4s;
+}
+
+.dreamy-navbar .navbar-links {
+  list-style: none;
+  margin: 0;
+  padding: 0 26px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 28px;
+  align-items: center;
+}
+
+.dreamy-navbar .navbar-link {
+  font-size: 1.14rem;
+  color: #b477e0;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 9px 19px;
+  border-radius: 18px;
+  transition: background 0.19s, color 0.2s, box-shadow 0.15s;
+  background: rgba(255, 255, 255, 0.01);
+  box-shadow: 0 0px 0px transparent;
+  position: relative;
+}
+
+.dreamy-navbar .navbar-link:after {
+  content: "";
+  position: absolute; left: 16px; right: 16px; bottom: 9px; height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #caaaff55 30%, #ffabd2cc 100%);
+  opacity: 0; transition: opacity .22s;
+}
+.dreamy-navbar .navbar-link.active,
+.dreamy-navbar .navbar-link:hover {
+  color: #ffabd2;
+  background: rgba(255, 255, 255, 0.37);
+  box-shadow: 0 2px 16px 0 rgba(255,171,210,0.10);
+}
+
+.dreamy-navbar .navbar-link.active:after,
+.dreamy-navbar .navbar-link:hover:after {
+  opacity: 1;
+}
+
+/* --- Animated Sparkles for Navbar --- */
+.navbar-sparkle-layer {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 9;
+  overflow: visible;
+  opacity: 0.87;
+}
+
+.navbar-sparkle {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 66%, #ffabd288 100%);
+  opacity: 0.77;
+  filter: blur(1.5px) brightness(1.32);
+  animation: navbarSparkleMove 6s linear infinite;
+}
+.sparkle-0 { left: 22%; top: 14%; animation-delay: 0.8s; }
+.sparkle-1 { left: 59%; top: 28%; animation-delay: 0.9s; }
+.sparkle-2 { left: 81%; top: 9%; animation-delay: 2.1s; }
+.sparkle-0,
+.card-sparkle.sparkle-0 { background: radial-gradient(circle, #fff, #ffeaf4 80%, #caaaff 100%); }
+.sparkle-1,
+.card-sparkle.sparkle-1 { background: radial-gradient(circle, #fff, #ffabd2 80%, #caaaff 100%); }
+.sparkle-2,
+.card-sparkle.sparkle-2 { background: radial-gradient(circle, #fff, #caaaff 90%, #ffabd2 100%); }
+.navbar-sparkle:nth-child(3n+1) { width: 12px; height: 12px; opacity: 0.66;}
+.navbar-sparkle:nth-child(2n) { width: 9px; height: 9px; opacity: 0.61;}
+@keyframes navbarSparkleMove {
+  0% { transform: translateY(0) scale(1); opacity: 0.8;}
+  10% { opacity: 1; }
+  80% { opacity: 1;}
+  100% { transform: translateY(-28px) scale(1.35); opacity: 0.18;}
+}
+
+/* --- GlassyCard Styles (for Main Cards) --- */
+.glassy-card, .dreamy-card {
+  position: relative;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.41);
+  backdrop-filter: blur(20px);
+  margin: 28px auto;
+  padding: 2.2rem 1.1rem 2.3rem 1.1rem;
+  transition: box-shadow .23s, background .21s;
+  box-shadow: 0 10px 32px 0 rgba(202,170,255,0.14);
+  max-width: 420px;
+  min-width: 260px;
+  border: 2.5px solid #ffabd2;
+  overflow: visible;
+}
+.glassy-card.dreamy-card {
+  border: 2.5px solid var(--dreamy-card-border, #caaaff);
+}
+
+.glassy-card:hover {
+  background: rgba(202, 170, 255, 0.16);
+  box-shadow: 0 18px 42px 0 rgba(255,171,210,0.17), 0 1.5px 2px rgba(246,233,253,0.18);
+}
+
+/* Card sparkles layer */
+.card-sparkles {
+  position: absolute;
+  pointer-events: none;
+  top: -12px; right: 10px; left: 10px; bottom: -12px;
+  z-index: 2;
+}
+.card-sparkle {
+  position: absolute;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  opacity: 0.61;
+  animation: cardSparkleMove 7.2s linear infinite;
+  filter: blur(1.4px) brightness(1.1);
+}
+.card-sparkle.sparkle-0 { left: 28%; top: 10%; animation-delay: .54s;}
+.card-sparkle.sparkle-1 { left: 68%; top: 80%; animation-delay: 1.02s;}
+.card-sparkle.sparkle-2 { left: 66%; top: 28%; animation-delay: 2.23s;}
+.card-sparkle.sparkle-0 { background: radial-gradient(circle, #fff, #ffeaf4 68%, #caaaff 100%);}
+.card-sparkle.sparkle-1 { background: radial-gradient(circle, #fff, #ffabd2 68%, #caaaff 100%);}
+.card-sparkle.sparkle-2 { background: radial-gradient(circle, #fff, #caaaff 90%, #ffabd2 100%);}
+@keyframes cardSparkleMove {
+  0% { transform: translateY(0) scale(1); opacity: 0.7;}
+  80% { opacity: 0.7;}
+  100% { transform: translateY(-18px) scale(1.22); opacity: 0.15;}
+}
+
+/* --- General Dreamy Accents --- */
+.dreamy-accent-text {
+  color: #b477e0;
+  text-shadow: 0 4px 22px #ffeaf488, 0 2px 2px #ffabd2af;
+  font-family: 'Baloo 2', 'Comic Sans MS', 'Helvetica Neue', cursive;
+  letter-spacing: 0.012em;
+}
+
+/* --- Responsive design for mobile --- */
+@media (max-width: 768px) {
+  .dreamy-navbar {
+    width: 95vw; min-width: 140px; max-width: 99vw; top: 16px;
+    border-radius: 28px;
+    padding-top: 10px; padding-bottom: 10px;
+  }
+  .dreamy-navbar .navbar-links {
+    gap: 9px;
+    padding: 0 8px;
+  }
+  .glassy-card, .dreamy-card {
+    max-width: 97vw;
+    min-width: 120px;
+    padding: 1.2rem 0.3rem 1.3rem 0.3rem;
+  }
 }
 
 .App-logo {
