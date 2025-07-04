@@ -1,0 +1,4 @@
+{
+    "command": "npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/pastel-dreamscape-105417-942e025c/frontend_app"
+}
