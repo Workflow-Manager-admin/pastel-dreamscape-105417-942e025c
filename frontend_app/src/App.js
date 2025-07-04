@@ -11,7 +11,7 @@ import Navbar from './components/Navbar';
 
 /**
  * PUBLIC_INTERFACE
- * Main app layout with dreamy glassmorphic Navbar and pastel background.
+ * Main app layout with dreamy glassmorphic left vertical Navbar and pastel background.
  */
 function App() {
   const [theme, setTheme] = useState('light');
@@ -52,9 +52,11 @@ function App() {
             }} />
         ))}
       </div>
-      {/* Floating glassy navbar (fixed at top) */}
+
+      {/* Left-aligned dreamy glassy vertical sidebar Navbar */}
       <Navbar />
-      {/* Theme toggle floats above navbar */}
+
+      {/* Theme toggle floats upper-right, always visible */}
       <button
         className="theme-toggle dreamy-shimmer"
         onClick={toggleTheme}
@@ -63,21 +65,24 @@ function App() {
           position: "fixed",
           right: 22,
           top: 18,
-          zIndex: 12,
+          zIndex: 1200,
         }}
       >
         {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
       </button>
-      <main style={{ flex: 1, marginTop: 100 }} role="main">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/room" element={<Room />} />
-          <Route path="/journal" element={<Journal />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/music" element={<Music />} />
-          <Route path="/shop" element={<Shop />} />
-        </Routes>
-      </main>
+
+      <div className="main-content">
+        <main style={{ flex: 1, minHeight: '100vh' }} role="main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/room" element={<Room />} />
+            <Route path="/journal" element={<Journal />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/music" element={<Music />} />
+            <Route path="/shop" element={<Shop />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   );
 }
