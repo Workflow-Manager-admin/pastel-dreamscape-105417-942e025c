@@ -11,7 +11,7 @@ import Navbar from './components/Navbar';
 
 /**
  * PUBLIC_INTERFACE
- * Main app layout with dreamy glassmorphic left vertical Navbar and pastel background.
+ * Main app layout with dreamy glassmorphic floating top Navbar and pastel background.
  */
 function App() {
   const [theme, setTheme] = useState('light');
@@ -53,7 +53,7 @@ function App() {
         ))}
       </div>
 
-      {/* Left-aligned dreamy glassy vertical sidebar Navbar */}
+      {/* Top-floating dreamy glassy Navbar */}
       <Navbar />
 
       {/* Theme toggle floats upper-right, always visible */}
@@ -71,7 +71,7 @@ function App() {
         {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
       </button>
 
-      <div className="main-content">
+      <div className="main-content" style={{ paddingTop: 92 }}>
         <main style={{ flex: 1, minHeight: '100vh' }} role="main">
           <Routes>
             <Route path="/" element={<Home />} />

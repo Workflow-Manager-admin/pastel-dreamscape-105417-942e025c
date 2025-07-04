@@ -60,8 +60,7 @@ body, .App, .dreamy-accent-text, input, textarea, button, select {
 }
 
 .main-content {
-  padding-left: 96px;
-  padding-top: 0;
+  padding-top: 92px; /* space for top navbar */
   transition: padding 0.32s;
   min-height: 100vh;
   min-width: 0;
@@ -72,11 +71,10 @@ body, .App, .dreamy-accent-text, input, textarea, button, select {
   width: 100%;
 }
 
-/* Responsive: if sidebar collapses to bottom, adjust content */
+/* Responsive: reduce padding on small screens */
 @media (max-width: 700px) {
   .main-content {
-    padding-left: 0;
-    padding-bottom: 64px;
+    padding-top: 78px;
   }
 }
 
@@ -94,9 +92,7 @@ body, .App, .dreamy-accent-text, input, textarea, button, select {
   100% { background-position: 0% 30%; }
 }
 
-/* (Keep or adapt) - Sparkle and shimmer layers, theme toggle, etc. */
-/* ...rest of dreamy styles (from previous CSS, left as-is for page content, cards, sparkles, etc.) */
-
+/* Shimmer/sparkle layers, dreamy pastel effects */
 .dreamy-sparkle-layer {
   position: absolute !important;
   pointer-events: none;
@@ -157,5 +153,108 @@ body, .App, .dreamy-accent-text, input, textarea, button, select {
   }
 }
 
-/* (Remove any old .dreamy-navbar, .navbar-links, etc. from previous top nav) */
+.dreamy-navbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(98vw, 910px);
+  max-width: 970px;
+  min-width: 272px;
+  background: rgba(255,255,255,0.61);
+  box-shadow: 0 7px 32px 0 #caaaff36, 0 1px 12px #ffabd288;
+  border-radius: 32px;
+  border: 2.6px solid #ffeaf4;
+  backdrop-filter: blur(18px);
+  transition: box-shadow 0.23s, background .18s;
+  z-index: 1130;
+  margin: 22px auto 0 auto;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  animation: dreamyNavbarPopIn 1.05s cubic-bezier(.57,-0.14,.21,1.08);
+}
+@keyframes dreamyNavbarPopIn {
+  0% { opacity: 0; transform: translateY(-21px) scale(0.98);}
+  44% { opacity: 1;}
+  100% { opacity: 1; transform: translateX(-50%) scale(1);}
+}
+.navbar-sparkle-layer {
+  position: absolute;
+  left: 0; top: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 12;
+  opacity: 0.56;
+}
+.navbar-sparkle {
+  position: absolute;
+  border-radius: 99px;
+  background: radial-gradient(circle, #fff 68%, #ffabd277 100%);
+  opacity: 0.72;
+  filter: blur(1px) brightness(1.15);
+  animation: navbarSparkleGlide 8s linear infinite;
+}
+@keyframes navbarSparkleGlide {
+  0% { opacity: 0.7; transform: scale(.92) translateY(0); }
+  25% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.18) translateY(-39px);}
+}
+.navbar-links {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0 1em 0 2em;
+  z-index: 14;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.navbar-item {
+  margin: 0 0.61em;
+}
+.navbar-link {
+  display: inline-block;
+  padding: 1.3em 1.2em 0.95em 1.2em;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.13em;
+  letter-spacing: 0.02em;
+  border-radius: 18px;
+  background: transparent;
+  text-decoration: none;
+  transition: background .17s, color .13s, box-shadow .13s;
+  outline: none;
+}
+.navbar-link.active,
+.navbar-link:focus,
+.navbar-link:hover {
+  color: #ffabd2;
+  background: linear-gradient(96deg,#caaaff33,#ffeaf422 80%);
+  box-shadow: 0 2px 12px #caaaff44;
+  text-decoration: none;
+}
+@media (max-width: 700px) {
+  .dreamy-navbar {
+    width: 99vw;
+    max-width: 99vw;
+    border-radius: 0 0 24px 24px;
+    margin: 0 auto 0 auto;
+    left: 0;
+    transform: none;
+    min-width: 0;
+  }
+  .navbar-links {
+    padding: 0 3vw !important;
+    font-size: 1em;
+  }
+  .navbar-link {
+    padding: 1.12em 0.62em;
+    font-size: 1em;
+    border-radius: 12px;
+  }
+}
+
+/* (Keep or adapt) - Sparkle and shimmer layers, theme toggle, etc. */
+/* ...rest of dreamy styles (from previous CSS, left as-is for page content, cards, sparkles, etc.) */
 /* Other dreamy styles, card styles, shimmer, etc., retained as needed for rest of app. */
