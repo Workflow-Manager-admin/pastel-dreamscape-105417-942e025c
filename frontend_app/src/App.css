@@ -258,3 +258,208 @@ body, .App, .dreamy-accent-text, input, textarea, button, select {
 /* (Keep or adapt) - Sparkle and shimmer layers, theme toggle, etc. */
 /* ...rest of dreamy styles (from previous CSS, left as-is for page content, cards, sparkles, etc.) */
 /* Other dreamy styles, card styles, shimmer, etc., retained as needed for rest of app. */
+
+/* Room-specific styles */
+.room-container {
+  position: relative;
+  width: 100%;
+  min-height: 80vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--dreamy-pink) 0%, var(--dreamy-purple) 100%);
+  overflow: hidden;
+}
+
+.decor-item {
+  position: absolute;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.decor-item.dragging {
+  cursor: grabbing;
+  z-index: 1000;
+}
+
+.sparkle-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 0.8em;
+  opacity: 0;
+  animation: sparkleFloat 2s ease-in-out infinite;
+}
+
+@keyframes sparkleFloat {
+  0%, 100% { opacity: 0; transform: translateY(0); }
+  50% { opacity: 0.8; transform: translateY(-10px); }
+}
+
+.room-theme {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s ease;
+}
+
+.theme-rainy {
+  background: linear-gradient(to bottom, #caaaff 0%, #b477e0 100%);
+  animation: rainDrop 20s linear infinite;
+}
+
+.theme-sakura {
+  background: linear-gradient(to bottom right, #ffabd2 0%, #ffeaf4 100%);
+  animation: petalFloat 15s ease infinite;
+}
+
+.theme-mist {
+  background: linear-gradient(135deg, #ffeaf4 0%, #caaaff 100%);
+  filter: blur(5px);
+}
+
+.theme-night-sky {
+  background: linear-gradient(to bottom, #b477e0 0%, #181021 100%);
+  animation: starTwinkle 10s ease infinite;
+}
+
+.theme-strawberry {
+  background: linear-gradient(to right, #ffabd2 0%, #ffeaf4 100%);
+}
+
+.theme-firelight {
+  background: linear-gradient(45deg, #ffe9c3 0%, #ffabd2 100%);
+  animation: flicker 3s ease-in-out infinite;
+}
+
+@keyframes rainDrop {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 1000px; }
+}
+
+@keyframes petalFloat {
+  0%, 100% { background-position: 0 0; }
+  50% { background-position: 100px -100px; }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes flicker {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+.quote-wall {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 200px;
+  background: var(--glassy-bg);
+  backdrop-filter: var(--glassy-blur);
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(202,170,255,0.2);
+}
+
+.quote-item {
+  background: rgba(255,255,255,0.8);
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  font-size: 0.9em;
+  color: var(--dreamy-accent);
+  animation: quoteFloat 0.5s ease-out;
+}
+
+@keyframes quoteFloat {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.magical-pet {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-size: 3em;
+  animation: petBounce 2s ease infinite;
+  cursor: pointer;
+}
+
+@keyframes petBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.room-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  background: var(--glassy-bg);
+  backdrop-filter: var(--glassy-blur);
+  padding: 10px 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(202,170,255,0.2);
+}
+
+.control-button {
+  background: linear-gradient(135deg, var(--dreamy-purple) 0%, var(--dreamy-pink) 100%);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.control-button:hover {
+  transform: scale(1.05);
+}
+
+.avatar-area {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.avatar-emoji {
+  font-size: 4em;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.avatar-emoji:hover {
+  transform: scale(1.1);
+}
+
+.avatar-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.avatar-button {
+  background: var(--glassy-bg);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: var(--dreamy-accent);
+  cursor: pointer;
+  backdrop-filter: var(--glassy-blur);
+}
