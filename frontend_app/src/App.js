@@ -27,12 +27,36 @@ function App() {
   };
 
   return (
-    <div className="App dreamy-app-bg">
+    <div className="App dreamy-app-bg dreamy-shimmer-bg">
+      {/* Soft dream background sparkles */}
+      <div className="dreamy-sparkle-layer" aria-hidden="true" style={{
+        position: "fixed", left: 0, top: 0, width: "100vw", height: "100vh", zIndex: 0, pointerEvents: "none"
+      }}>
+        {[...Array(9)].map((_, i) => (
+          <span
+            key={i}
+            className="dreamy-sparkle"
+            style={{
+              left: `${12 + (i * 13 + i * 49) % 78}%`,
+              top: `${(6 + (i * 33 + i * 13) % 91)}%`,
+              width: 14 + (i % 2) * 7 + (i % 3) * 3,
+              height: 14 + (i % 2) * 7 + (i % 3) * 3,
+              filter: `blur(${0.7 + (i % 2 ? 1.1 : 0.2)}px) brightness(1.${2 + i % 5})`,
+              opacity: 0.7 + 0.19 * (i % 3),
+              background: i % 3 === 2
+                ? "radial-gradient(circle,#ffabd244 70%,#ffeaf4bb 100%)"
+                : i % 2
+                ? "radial-gradient(circle,#caaaff77 80%,#ffeaf4bb 100%)"
+                : "radial-gradient(circle,#fff1 60%,#caaaff33 100%)",
+              animationDelay: `${0.22 * i}s`
+            }} />
+        ))}
+      </div>
       {/* Floating glassy navbar (fixed at top) */}
       <Navbar />
       {/* Theme toggle floats above navbar */}
       <button
-        className="theme-toggle"
+        className="theme-toggle dreamy-shimmer"
         onClick={toggleTheme}
         aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
         style={{

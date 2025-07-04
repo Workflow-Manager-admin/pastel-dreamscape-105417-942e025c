@@ -1,24 +1,152 @@
 /* CSS Variables for Theme Management */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
+  /* --- Pastel Dreamscape Global Colors --- */
+  --bg-primary: #f8f7fb;
+  --bg-secondary: #ffeaf4;
+  --text-primary: #84619b;
+  --text-secondary: #b477e0;
   --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  --button-bg: #caaaff;
+  --button-text: #fff;
+  --dreamy-pink: #ffabd2;
+  --dreamy-purple: #caaaff;
+  --dreamy-blue: #aee7fd;
+  --dreamy-accent: #b477e0;
+  --dreamy-yellow: #ffe9c3;
+  --glassy-bg: rgba(255,255,255,0.41);
+  --glassy-blur: blur(21px);
 }
 
+/* Ethereal font family included globally */
+body, .App, .dreamy-accent-text, input, textarea, button, select {
+  font-family: 'Baloo 2', 'Quicksand', 'Comic Sans MS', cursive, Arial, sans-serif !important;
+  letter-spacing: 0.01em;
+}
 [data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+  /* Dark theme colors (shimmer: purple/blue haze) */
+  --bg-primary: #181021;
+  --bg-secondary: #221532;
+  --text-primary: #ffeaf4;
+  --text-secondary: #caaaff;
+  --border-color: #302856;
+  --button-bg: #caaaff;
+  --button-text: #fff;
+  --dreamy-pink: #ffabd2;
+  --dreamy-purple: #caaaff;
+  --dreamy-blue: #aee7fd;
+  --dreamy-accent: #b477e0;
+  --dreamy-yellow: #ffe9c3;
+  --glassy-bg: rgba(32,18,39,0.45);
+  --glassy-blur: blur(22px);
+}
+
+/* --- Reusable Glassy/Pastel/Blurred/Animated Utility Classes --- */
+
+/* Pastel-glass shimmer base for dreamy backgrounds */
+.dreamy-shimmer-bg {
+  background: linear-gradient(110deg, #ffeaf4 10%, #caaaff 48%, #ffabd2 98%);
+  background-size: 180% 180%;
+  animation: pastelShimmerMove 7s linear infinite;
+  filter: blur(0.2px) brightness(1.05);
+  position: relative;
+}
+
+@keyframes pastelShimmerMove {
+  0% { background-position: 0% 30%; }
+  60% { background-position: 120% 80%; }
+  100% { background-position: 0% 30%; }
+}
+
+/* Blurred glass morph effect */
+.glassy-bg {
+  background: var(--glassy-bg);
+  backdrop-filter: var(--glassy-blur);
+  -webkit-backdrop-filter: var(--glassy-blur);
+  border-radius: 28px;
+  box-shadow: 0 8px 32px 0 rgba(202,170,255,0.13), 0 0px 14px #ffabd255;
+  transition: background 0.36s, box-shadow 0.32s;
+}
+
+/* Dreamy soft border utility */
+.dreamy-rounded {
+  border-radius: 28px !important;
+  overflow: hidden;
+  box-shadow: 0 2px 22px 0 #ffabd244;
+}
+
+/* Gentle soft border color for all cards/containers */
+.soft-pastel-border {
+  border: 2.3px solid #ffeaf4;
+  box-shadow: 0 1px 13px #caaaff22, 0 0px 5px #ffabd244;
+}
+
+/* Ethereal shimmer animation for accents, headers, and buttons */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer:before {
+  content: "";
+  position: absolute;
+  top: 0; left: -120%;
+  width: 280%;
+  height: 100%;
+  background: linear-gradient(
+    83deg,
+    transparent 10%,
+    #fff6 33%,
+    #ffabd250 50%,
+    #caaaff33 66%,
+    transparent 89%);
+  animation: shimmer-glide 2.3s linear infinite;
+  z-index: 0 !important;
+}
+@keyframes shimmer-glide {
+  0% { left: -120%; }
+  100% { left: 120%; }
+}
+
+/* Magical sparkles overlay layer (reusable anywhere) */
+.dreamy-sparkle-layer {
+  position: absolute !important;
+  pointer-events: none;
+  z-index: 11;
+  left: 0; top: 0; right: 0; bottom: 0;
+  overflow: visible;
+  opacity: 0.81;
+}
+.dreamy-sparkle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 70%, #ffabd288 100%);
+  opacity: 0.74;
+  filter: blur(1.5px) brightness(1.23);
+  animation: sparkleGlide 9s linear infinite;
+}
+@keyframes sparkleGlide {
+  0% { opacity: 0.7; transform: scale(0.9) translateY(0); }
+  25% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.21) translateY(-55px);}
+}
+
+/* Soft transition for all dreamy/interactive UI elements */
+.dreamy-transition, .dreamy-card, .glassy-card, .dreamy-nav-card, .dreamy-profile-bar, button, input, select, textarea {
+  transition: 
+    background 0.28s cubic-bezier(.87,.02,.39,.99), 
+    color 0.28s, 
+    border 0.23s,
+    box-shadow 0.33s,
+    filter 0.27s 
+  !important;
+}
+
+/* Universal soft focus style */
+*:focus-visible, input:focus, select:focus, textarea:focus, button:focus {
+  outline: 2px solid var(--dreamy-purple, #caaaff);
+  outline-offset: 3px;
+  background: #f8eafb66;
+  box-shadow: 0 0px 8px 0 #caaaff55;
 }
 
 /* --- Dreamy/Pastel Glassmorphic Core Styles --- */
@@ -207,6 +335,16 @@
 }
 
 /* --- Responsive design for mobile --- */
+@media (max-width: 920px) {
+  .dreamy-card, .glassy-card, .dreamy-card-grid {
+    max-width: 97vw !important;
+    min-width: 95vw !important;
+    border-radius: 18px !important;
+    padding-left: 0.7rem !important;
+    padding-right: 0.7rem !important;
+  }
+}
+
 @media (max-width: 768px) {
   .dreamy-navbar {
     width: 95vw; min-width: 140px; max-width: 99vw; top: 16px;
@@ -318,6 +456,20 @@
   }
 }
 
+/* Reusable shimmer/text glow for emotional prompts / soft highlights */
+.dreamy-shimmer-text, .ethereal-glow {
+  background: linear-gradient(92deg,#caaaff,#ffabd2 33%,#fff 69%,#b477e0 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 13px #caaaff33) drop-shadow(0 2px 6px #ffabd244);
+  /* prettier text glow for ethereal effect */
+  text-shadow: 0 4px 22px #ffeaf488, 0 2px 2px #ffabd2af;
+  font-weight: 800;
+}
+
+
 .App-header {
   background-color: var(--bg-secondary);
   min-height: 100vh;
@@ -340,27 +492,105 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: var(--button-bg);
+  background: linear-gradient(94deg, #ffabd2 10%, #caaaff 90%);
   color: var(--button-text);
   border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 20px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px #ffabd233, 0 0px 5px #caaaff33;
+  filter: brightness(1.07);
+  z-index: 15;
+  transition: box-shadow 0.22s, background .22s, color .18s, filter .18s;
 }
-
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+.theme-toggle:hover, .theme-toggle:focus {
+  background: linear-gradient(87deg, #caaaff 20%, #ffabd2 93%);
+  box-shadow: 0 5px 24px #caaaff66, 0 2px 7px #ffabd244;
+  filter: blur(0.1px) brightness(1.19);
 }
 
 .theme-toggle:active {
-  transform: translateY(0);
+  transform: scale(1.01);
+  filter: blur(0) brightness(.96);
 }
+
+/* General dreamy/rounded style for all interactive buttons */
+button, .dreamy-btn {
+  border-radius: 18px;
+  background: linear-gradient(91deg, #ffeaf4 60%, #caaaff 140%);
+  color: var(--dreamy-accent, #b477e0);
+  font-weight: 650;
+  font-size: 1.01em;
+  padding: 0.5em 1.6em;
+  border: none;
+  box-shadow: 0 2px 10px #caaaff24, 0 0px 6px #ffabd244;
+  transition: all 0.21s cubic-bezier(.77,.01,.28,.97);
+  cursor: pointer;
+}
+button:hover, .dreamy-btn:hover, button:focus, .dreamy-btn:focus {
+  background: linear-gradient(87deg, #ffabd2aa 10%, #caaaff 80%);
+  color: #fff;
+  box-shadow: 0 5px 18px #ffabd299, 0 0px 18px #caaaff44;
+  filter: blur(0.1px) brightness(1.08);
+}
+
+/* Card-wide shimmer highlight for home, profile, music, shop, etc */
+.dreamy-card-bg-shimmer {
+  background: linear-gradient(115deg, #ffeaf4cc 21%, #caaaffbb 73%, #ffabd266 96%);
+  animation: pastelShimmerMove 9s linear infinite;
+  background-size: 170% 130%;
+  filter: blur(0.2px) brightness(1.08);
+}
+
+/* Pastel input fields and select */
+input, select, textarea {
+  font-family: inherit;
+  border-radius: 14px !important;
+  border: 2px solid #ffabd2;
+  background: rgba(255, 255, 255, 0.43);
+  color: #b477e0;
+  font-size: 1.06em;
+  font-weight: 600;
+  padding: 7px 17px;
+  box-shadow: 0 2px 8px #caaaff11;
+  min-width: 65px;
+  transition: border 0.22s, box-shadow .19s;
+}
+input:focus, select:focus, textarea:focus {
+  background: #fff2;
+  border: 2.5px solid #caaaff;
+  box-shadow: 0 2px 19px #caaaff44;
+  color: #b477e0;
+}
+
+/* Restore gentle inherit for default not active */
+input:not(:focus):not(:hover), select:not(:focus):not(:hover), textarea:not(:focus):not(:hover) {
+  border-color: #ffeaf4;
+}
+
+/* Animate all navigational links on hover with shimmer */
+a, .navbar-link {
+  transition: color 0.19s, background 0.2s;
+  position: relative;
+}
+a.dreamy-shimmer-link::after, .dreamy-shimmer-link::after {
+  content: "";
+  position: absolute;
+  top: 55%; left: 0;
+  width: 97%;
+  height: 46%;
+  background: linear-gradient(93deg,transparent,#ffabd244 60%,#caaaff55 80%,transparent);
+  opacity: 0;
+  transition: opacity 0.19s;
+  pointer-events: none;
+  border-radius: 15px;
+}
+a.dreamy-shimmer-link:hover::after, .dreamy-shimmer-link:hover::after {
+  opacity: 1;
+}
+
 
 @keyframes App-logo-spin {
   from {

@@ -1,10 +1,14 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Baloo 2', 'Quicksand', 'Comic Sans MS', cursive, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Global dreamy pastel background + subtle fallback */
+  background: linear-gradient(120deg, #ffeaf4 22%, #caaaff 60%, #ffabd2 100%);
+  min-height: 100vh;
+  /* Add a faint, magical sparkle layer for backdrop */
+  position: relative;
+  overflow-x: hidden;
 }
 
 code {
