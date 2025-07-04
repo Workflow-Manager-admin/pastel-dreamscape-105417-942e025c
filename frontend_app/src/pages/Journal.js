@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import GlassyCard from "../components/GlassyCard";
+import { getStored, setStored, usePersistedState } from "../utils/storage";
 
 // --- Dreamy Gentle Prompts Pool ---
 const SOFT_PROMPTS = [
@@ -39,40 +40,41 @@ const SPARKLE_THRESHOLDS = [
   { lines: 12, emoji: "🪐", desc: "Cosmic Bloom" },
 ];
 
-// Helper: load/save from localStorage
 const STORAGE_KEY = "dreamscape-journal-entries";
 
 // PUBLIC_INTERFACE
 /**
  * Journal page: free-writing diary w/ mood tagging, daily prompts,
- * pastel glassy UI, unlockable sparkles based on writing, persistent via localStorage.
+ * pastel glassy UI, unlockable sparkles based on writing,
+ * persistent via localStorage (with graceful error handling/fallback to memory).
  */
 function Journal() {
   // State for today's entry (by date), all entries, input fields
   const today = new Date().toISOString().slice(0, 10); // yyyy-mm-dd key
-  const [entries, setEntries] = useState({});
+  const [entries, setEntries] = usePersistedState(STORAGE_KEY, {});
   const [text, setText] = useState("");
   const [moods, setMoods] = useState([]);
   const [prompt, setPrompt] = useState(getRandomPrompt());
   const [showSparkles, setShowSparkles] = useState([]);
   const textareaRef = useRef();
 
-  // Load entries from localStorage on mount
+  // Load entries from localStorage (robust) on mount
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        setEntries(parsed);
-        if (parsed[today]) {
-          setText(parsed[today].text || "");
-          setMoods(parsed[today].moods || []);
-        }
+      const parsed = getStored(STORAGE_KEY, {});
+      setEntries(parsed);
+      if (parsed && parsed[today]) {
+        setText(parsed[today].text || "");
+        setMoods(parsed[today].moods || []);
       }
-    } catch (_) {}
+    } catch (_) {
+      setEntries({});
+      setText("");
+      setMoods([]);
+    }
   }, [today]);
 
-  // Save changes to localStorage whenever text or moods update
+  // Save changes to localStorage or fallback whenever text or moods update
   useEffect(() => {
     if (text.trim().length === 0 && moods.length === 0) return;
     const updated = {
@@ -85,8 +87,8 @@ function Journal() {
       }
     };
     setEntries(updated);
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-  // eslint-disable-next-line
+    setStored(STORAGE_KEY, updated);
+    // eslint-disable-next-line
   }, [text, moods]);
 
   // Update sparkles based on diary lines (more lines = more unlocks)
@@ -117,10 +119,10 @@ function Journal() {
   // Save diary (extra feedback)
   function handleSave(e) {
     e.preventDefault();
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    setStored(STORAGE_KEY, {
       ...entries,
       [today]: { text, moods, date: today, ts: Date.now() }
-    }));
+    });
   }
 
   // View previous days (simple dropdown)

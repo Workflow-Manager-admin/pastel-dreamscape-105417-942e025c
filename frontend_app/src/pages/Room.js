@@ -1,5 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import GlassyCard from "../components/GlassyCard";
+import { getStored, setStored, usePersistedState } from "../utils/storage";
 
 // Example list of ENOL drag-and-droppable decor assets (can be textured SVG/png or emoji stand-ins for MVP)
 const ENOL_DECOR = [
@@ -36,17 +37,27 @@ const DEFAULT_QUOTES = [
   "Validation is magic for the soul."
 ];
 
-// --- Drag-and-drop helpers ---
 function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 const ROOM_MIN_X = 0, ROOM_MIN_Y = 0, ROOM_MAX_X = 480, ROOM_MAX_Y = 350;
+
+// KEYS for state persistence
+const ROOM_KEY = "dreamscape-room-v1";
+const ROOM_MOOD_KEY = "dreamscape-room-mood";
+const ROOM_AVATAR_KEY = "dreamscape-room-avatar";
+const ROOM_SCENT_KEY = "dreamscape-room-scent";
+const ROOM_QUOTES_KEY = "dreamscape-room-pinned-quotes";
+const ROOM_DECOR_KEY = "dreamscape-room-decor";
+const ROOM_MODE_KEY = "dreamscape-room-mode";
 
 // PUBLIC_INTERFACE
 /**
  * My Room: dreamy, interactive "playground" for drag-decor, mood/avatar/scent mode, pin favorite quotes.
+ * Persists state robustly to localStorage (or fallback).
  */
 function Room() {
-  // Drag state for ENOL decor
-  const [decor, setDecor] = useState(() =>
+  // Robustly-persisted decor state
+  const [decor, setDecor] = usePersistedState(
+    ROOM_DECOR_KEY,
     ENOL_DECOR.map((d) => ({
       ...d,
       pos: d.defaultPos,
@@ -56,25 +67,25 @@ function Room() {
   );
   const roomRef = useRef();
 
-  // Mode state for each feature
-  const [mode, setMode] = useState("mood"); // "mood", "avatar", "scent"
-  const [currentMood, setCurrentMood] = useState(MOODS[0]);
-  const [currentAvatar, setCurrentAvatar] = useState(AVATARS[0]);
-  const [currentScent, setCurrentScent] = useState(SCENTS[0]);
-  const [pinnedQuotes, setPinnedQuotes] = useState(DEFAULT_QUOTES.slice(0, 2));
+  // Persisted mode, mood, avatar, scent, and pinned quotes
+  const [mode, setMode] = usePersistedState(ROOM_MODE_KEY, "mood"); // "mood", "avatar", "scent"
+  const [currentMood, setCurrentMood] = usePersistedState(ROOM_MOOD_KEY, MOODS[0]);
+  const [currentAvatar, setCurrentAvatar] = usePersistedState(ROOM_AVATAR_KEY, AVATARS[0]);
+  const [currentScent, setCurrentScent] = usePersistedState(ROOM_SCENT_KEY, SCENTS[0]);
+  const [pinnedQuotes, setPinnedQuotes] = usePersistedState(ROOM_QUOTES_KEY, DEFAULT_QUOTES.slice(0, 2));
 
-  // Add new quote to pins (simulate with input)
+  // Input field for pinning new quotes
   const [newQuote, setNewQuote] = useState("");
 
-  // Handle start drag
+  // --- Decor Drag ---
   const handleDragStart = (index, e) => {
     e.preventDefault();
     const decorItem = decor[index];
     const roomRect = roomRef.current.getBoundingClientRect();
     let clientX = e.type === "touchstart" ? e.touches[0].clientX : e.clientX;
     let clientY = e.type === "touchstart" ? e.touches[0].clientY : e.clientY;
-    setDecor((prev) =>
-      prev.map((d, i) =>
+    setDecor((prev) => {
+      const upd = prev.map((d, i) =>
         i === index
           ? {
               ...d,
@@ -85,12 +96,13 @@ function Room() {
               }
             }
           : d
-      )
-    );
+      );
+      setStored(ROOM_DECOR_KEY, upd);
+      return upd;
+    });
     document.body.style.cursor = "grabbing";
   };
 
-  // Handle dragging (mousemove/touchmove)
   const handleDrag = (index, e) => {
     const d = decor[index];
     if (!d.isDragging) return;
@@ -106,43 +118,50 @@ function Room() {
     }
     let newX = clamp(clientX - roomRect.left - d.offset.x, ROOM_MIN_X, ROOM_MAX_X);
     let newY = clamp(clientY - roomRect.top - d.offset.y, ROOM_MIN_Y, ROOM_MAX_Y);
-    setDecor((prev) =>
-      prev.map((obj, i) =>
+    setDecor((prev) => {
+      const upd = prev.map((obj, i) =>
         i === index ? { ...obj, pos: { x: newX, y: newY } } : obj
-      )
-    );
+      );
+      setStored(ROOM_DECOR_KEY, upd);
+      return upd;
+    });
   };
 
-  // Handle drag end
   const handleDragEnd = (index) => {
-    setDecor((prev) =>
-      prev.map((d, i) => (i === index ? { ...d, isDragging: false } : d))
-    );
+    setDecor((prev) => {
+      const upd = prev.map((d, i) => (i === index ? { ...d, isDragging: false } : d));
+      setStored(ROOM_DECOR_KEY, upd);
+      return upd;
+    });
     document.body.style.cursor = "auto";
   };
 
-  // Change mode bar
+  // Mode & feature controls
   const modeButtons = [
     { key: "mood", label: "Mood", icon: "💞" },
     { key: "avatar", label: "Avatar", icon: "🧸" },
     { key: "scent", label: "Scent", icon: "🌸" }
   ];
 
-  // Render pin-able quotes
+  // Pin quote logic (persisted)
   function handlePinQuote() {
     if (newQuote.trim().length > 1) {
-      setPinnedQuotes((q) => [
-        ...q.slice(-2), // only last 2 remain, max 3
-        newQuote.trim()
-      ]);
+      setPinnedQuotes((q) => {
+        const upd = [...q.slice(-2), newQuote.trim()];
+        setStored(ROOM_QUOTES_KEY, upd);
+        return upd;
+      });
       setNewQuote("");
     }
   }
   function handleRemoveQuote(idx) {
-    setPinnedQuotes((q) => q.filter((_, i) => i !== idx));
+    setPinnedQuotes((q) => {
+      const upd = q.filter((_, i) => i !== idx);
+      setStored(ROOM_QUOTES_KEY, upd);
+      return upd;
+    });
   }
 
-  // Render the "My Room" dreamy pastel playground!
   return (
     <div
       style={{
@@ -385,7 +404,9 @@ function Room() {
           {modeButtons.map((btn) => (
             <button
               key={btn.key}
-              onClick={() => setMode(btn.key)}
+              onClick={() => {
+                setMode(btn.key); setStored(ROOM_MODE_KEY, btn.key);
+              }}
               className={mode === btn.key ? "dreamy-accent-text" : ""}
               style={{
                 fontSize: 18,
@@ -443,7 +464,9 @@ function Room() {
                     key={m.name}
                     role="button"
                     tabIndex={0}
-                    onClick={() => setCurrentMood(m)}
+                    onClick={() => {
+                      setCurrentMood(m); setStored(ROOM_MOOD_KEY, m);
+                    }}
                     style={{
                       background: currentMood.name === m.name
                         ? "linear-gradient(78deg,#caaaff5d 60%,#ffabd26b 100%)"
@@ -492,7 +515,9 @@ function Room() {
                     key={a.id}
                     role="button"
                     tabIndex={0}
-                    onClick={() => setCurrentAvatar(a)}
+                    onClick={() => {
+                      setCurrentAvatar(a); setStored(ROOM_AVATAR_KEY, a);
+                    }}
                     style={{
                       background: currentAvatar.id === a.id
                         ? "linear-gradient(78deg,#ffabd248 20%,#caaaff42 100%)"
@@ -541,7 +566,9 @@ function Room() {
                     key={s.id}
                     role="button"
                     tabIndex={0}
-                    onClick={() => setCurrentScent(s)}
+                    onClick={() => {
+                      setCurrentScent(s); setStored(ROOM_SCENT_KEY, s);
+                    }}
                     style={{
                       background: currentScent.id === s.id
                         ? "linear-gradient(78deg,#ffeaf452 40%,#ffabd237 100%)"
@@ -580,7 +607,7 @@ function Room() {
         {/* Central avatar + mood visual (animated) */}
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 210,
             top: 150,
             zIndex: 20,

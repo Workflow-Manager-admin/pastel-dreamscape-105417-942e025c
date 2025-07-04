@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import GlassyCard from "../components/GlassyCard";
+import { getStored, setStored, usePersistedState } from "../utils/storage";
 
 // --- Constants for options and pastel themes ---
 const PRONOUNS = [
@@ -32,12 +33,12 @@ const STORAGE_KEY = "dreamscape-profile-v1";
 // PUBLIC_INTERFACE
 /**
  * Profile page: open, wide, multi-column layout with editable name, pronouns, avatar,
- * DOB, favorite mood/music, bio, picture upload, mood status, persistent with localStorage.
+ * DOB, favorite mood/music, bio, picture upload, mood status, persisted robustly (localStorage or fallback).
  * Dreamy, pastel glassmorphic profile bar always visible at top.
  */
 function Profile() {
-  // -- State & Persistent Logic
-  const [profile, setProfile] = useState({
+  // -- State & Persistent Logic (robust persistence w/ error handling)
+  const [profile, setProfile] = usePersistedState(STORAGE_KEY, {
     name: "",
     pronouns: "",
     pronounsCustom: "",
@@ -52,23 +53,6 @@ function Profile() {
   });
 
   const fileInputRef = useRef();
-
-  // On load, retrieve from localStorage
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        let saved = JSON.parse(raw);
-        setProfile({ ...profile, ...saved });
-      }
-    } catch (_) {}
-    // eslint-disable-next-line
-  }, []);
-
-  // Save whenever profile changes
-  useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
-  }, [profile]);
 
   // -- Field change handler --
   const handleField = (k, v) => {
