@@ -10,7 +10,7 @@ import React from "react";
  *   - style: additional style overrides
  *   - className: additional class for styling
  */
-function GlassyCard({ children, accentColor = "#caaaff", style = {}, className = "" }) {
+function GlassyCard({ children, accentColor = "#caaaff", style = {}, className = "", tabIndex, ...props }) {
   return (
     <div
       className={`glassy-card dreamy-card ${className}`}
@@ -20,6 +20,10 @@ function GlassyCard({ children, accentColor = "#caaaff", style = {}, className =
           "0 8px 32px 0 rgba(202,170,255,0.16), 0 0px 2px rgba(255, 171, 210, .08)",
         ...style
       }}
+      tabIndex={tabIndex}
+      role="region"
+      aria-label={props['aria-label'] || "Glassy card"}
+      {...props}
     >
       <div className="card-sparkles" aria-hidden="true">
         {[...Array(7)].map((_, i) => (

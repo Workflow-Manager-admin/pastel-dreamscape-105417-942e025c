@@ -187,8 +187,10 @@ function Home() {
           marginBottom: 50,
           justifyItems: "center",
         }}
+        role="list"
+        aria-label="Main pages"
       >
-        {NAV_CARDS.map(nav => (
+        {NAV_CARDS.map((nav, idx) => (
           <GlassyCard
             key={nav.label}
             accentColor={nav.accentColor}
@@ -204,9 +206,12 @@ function Home() {
               boxShadow: "0 8px 32px 0 rgba(202,170,255,0.18)",
               transition: "transform .13s, box-shadow .13s",
             }}
+            role="listitem"
+            aria-label={`Navigate to ${nav.label}`}
           >
             <a
               href={nav.path}
+              tabIndex={0}
               style={{
                 textDecoration: "none",
                 color: "#b477e0",
@@ -215,6 +220,8 @@ function Home() {
                 alignItems: "center",
                 minHeight: 98,
               }}
+              role="link"
+              aria-label={nav.label}
             >
               <span style={{
                 fontSize: "2.1rem",

@@ -68,7 +68,7 @@ function App() {
       >
         {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
       </button>
-      <main style={{ flex: 1, marginTop: 100 }}>
+      <main style={{ flex: 1, marginTop: 100 }} role="main">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/room" element={<Room />} />
